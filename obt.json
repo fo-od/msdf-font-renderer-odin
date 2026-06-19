@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fo-od/obt/refs/heads/main/schema/obt.schema.json",
+  "name": "arfont-renderer-raylib",
+  "build": {
+    "useOlsCollections": true
+  }
+}

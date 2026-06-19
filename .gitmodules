@@ -1,0 +1,6 @@
+[submodule "src/vendor/arfont-decoder-odin"]
+	path = src/vendor/arfont-decoder-odin
+	url = https://github.com/fo-od/arfont-decoder-odin.git
+[submodule "src/vendor/arfont-decoder"]
+	path = src/vendor/arfont-decoder
+	url = https://github.com/fo-od/arfont-decoder-odin.git
