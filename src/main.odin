@@ -17,7 +17,7 @@ main :: proc() {
 }
 
 init :: proc() {
-	rl.SetConfigFlags({.WINDOW_RESIZABLE, .MSAA_4X_HINT, .VSYNC_HINT})
+	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	rl.InitWindow(640, 480, "arfont-renderer-raylib")
 	msdfShader = rl.LoadShader(nil, "src/resources/msdf.glsl")
 	fontTexture = rl.LoadTexture("src/resources/inter.png")
