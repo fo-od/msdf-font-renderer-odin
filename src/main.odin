@@ -21,6 +21,7 @@ init :: proc() {
 	rl.InitWindow(640, 480, "arfont-renderer-raylib")
 	msdfShader = rl.LoadShader(nil, "src/resources/msdf.glsl")
 	fontTexture = rl.LoadTexture("src/resources/inter.png")
+	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scaling
 
 	fgColorLoc = rl.GetShaderLocation(msdfShader, "fgColor")
 
