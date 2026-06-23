@@ -2,7 +2,7 @@ package arfont
 
 import "core:fmt"
 
-getGlyph :: proc(font: Font, char: rune) -> Glyph {
+getGlyph :: proc(font: Font, char: i32) -> Glyph {
 	for g in font.glyphs {
 		if g.unicode == char do return g
 	}

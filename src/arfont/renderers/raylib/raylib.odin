@@ -6,11 +6,11 @@ import rl "vendor:raylib"
 drawGlyph :: proc(
 	font: arfont.Font,
 	texture: rl.Texture2D,
-	char: rune,
+	char: i32,
 	pos: rl.Vector2,
 	color: rl.Color,
 ) {
-	glyph := getGlyph(font, char)
+	glyph := arfont.getGlyph(font, char)
 	if font.atlas.yOrigin == "bottom" {
 		rl.DrawTextureRec(
 			texture,
@@ -24,7 +24,6 @@ drawGlyph :: proc(
 			color,
 		)
 	} else {
-		// FIXME: render it correctly when origin is top to bottom
 		rl.DrawTextureRec(
 			texture,
 			{

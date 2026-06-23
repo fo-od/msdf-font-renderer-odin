@@ -30,7 +30,7 @@ Metrics :: struct {
 }
 
 Glyph :: struct {
-	unicode:     rune `json:"unicode"`,
+	unicode:     i32 `json:"unicode"`,
 	// in ems
 	advance:     f32 `json:"advance"`,
 	// in ems
