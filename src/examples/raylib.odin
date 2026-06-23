@@ -1,12 +1,10 @@
 package main
 
-import "arfont"
-import arfont_renderer "arfont/renderers/raylib"
-import "core:fmt"
+import "../arfont"
+import arfont_renderer "../arfont/renderers/raylib"
 import "core:os"
 import rl "vendor:raylib"
 
-msdfShader: rl.Shader
 font: arfont.Font
 fontTexture: rl.Texture2D
 fontScale: f32 = 1
@@ -27,10 +25,10 @@ init :: proc() {
 	arfont_renderer.init_shader()
 
 	fontTexture = rl.LoadTexture("src/resources/inter.png")
-	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scalinga
+	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scaling
 
-	fontFile, _ := os.open("src/resources/inter.json")
-	font = arfont.parse_json_file(fontFile)
+	fontData, _ := os.open("src/resources/inter.json")
+	font = arfont.parse_json_file(fontData)
 }
 
 draw :: proc() {
@@ -41,8 +39,16 @@ draw :: proc() {
 	arfont_renderer.draw_text(
 		font,
 		fontTexture,
-		"Hellope",
-		rl.GetMousePosition(),
+		"Use mouse wheel to zoom in/out!",
+		{},
+		rl.WHITE,
+		1,
+	)
+	arfont_renderer.draw_text(
+		font,
+		fontTexture,
+		"Hellope!",
+		{cast(f32)rl.GetScreenWidth() / 2.0, cast(f32)rl.GetScreenHeight() / 2.0},
 		rl.WHITE,
 		fontScale,
 	)
