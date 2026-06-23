@@ -31,30 +31,28 @@ init :: proc() {
 
 	fontFile, _ := os.open("src/resources/inter.json")
 	font = arfont.parse_json_file(fontFile)
-
-	fgColor := [4]f32{1.0, 1.0, 1.0, 1.0}
-	rl.SetShaderValue(msdfShader, fgColorLoc, &fgColor, .VEC4)
 }
 
 draw :: proc() {
 	rl.BeginDrawing()
 	rl.ClearBackground(rl.BLACK)
 
-	// draw
 	rl.BeginShaderMode(msdfShader)
-	arfont_renderer.drawGlyph(font, fontTexture, 'A', {}, rl.WHITE)
+	arfont_renderer.draw_text(
+		font,
+		fontTexture,
+		"Hellope",
+		rl.GetMousePosition(),
+		rl.WHITE,
+		fontScale,
+	)
 	rl.EndShaderMode()
 
 	rl.EndDrawing()
 }
 
 input :: proc() {
-	if rl.IsKeyDown(.UP) {
-		fontScale += 0.5 * rl.GetFrameTime()
-	}
-	if rl.IsKeyDown(.DOWN) {
-		fontScale -= 0.5 * rl.GetFrameTime()
-	}
+	fontScale += rl.GetMouseWheelMove() * rl.GetFrameTime()
 	if fontScale < 0.1 do fontScale = 0.1
 }
 
