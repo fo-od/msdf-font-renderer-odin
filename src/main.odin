@@ -24,7 +24,7 @@ init :: proc() {
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	rl.InitWindow(640, 480, "arfont-renderer-raylib")
 
-	msdfShader = rl.LoadShader(nil, "src/resources/msdf.glsl")
+	arfont_renderer.init_shader()
 
 	fontTexture = rl.LoadTexture("src/resources/inter.png")
 	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scalinga
@@ -37,7 +37,7 @@ draw :: proc() {
 	rl.BeginDrawing()
 	rl.ClearBackground(rl.BLACK)
 
-	rl.BeginShaderMode(msdfShader)
+	rl.BeginShaderMode(arfont_renderer.shader)
 	arfont_renderer.draw_text(
 		font,
 		fontTexture,
