@@ -1,17 +1,21 @@
 package main
 
-import "core:c"
-import af "vend:arfont-decoder/src"
+import "arfont"
+import arfont_renderer "arfont/renderers/raylib"
+import "core:fmt"
+import "core:os"
 import rl "vendor:raylib"
 
 msdfShader: rl.Shader
+font: arfont.Font
 fontTexture: rl.Texture2D
-fgColorLoc: i32
+fontScale: f32 = 1
 
 main :: proc() {
 	init()
 
 	for !rl.WindowShouldClose() {
+		input()
 		draw()
 	}
 }
@@ -19,11 +23,14 @@ main :: proc() {
 init :: proc() {
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
 	rl.InitWindow(640, 480, "arfont-renderer-raylib")
-	msdfShader = rl.LoadShader(nil, "src/resources/msdf.glsl")
-	fontTexture = rl.LoadTexture("src/resources/inter.png")
-	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scaling
 
-	fgColorLoc = rl.GetShaderLocation(msdfShader, "fgColor")
+	msdfShader = rl.LoadShader(nil, "src/resources/msdf.glsl")
+
+	fontTexture = rl.LoadTexture("src/resources/inter.png")
+	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scalinga
+
+	fontFile, _ := os.open("src/resources/inter.json")
+	font = arfont.parse_json_file(fontFile)
 
 	fgColor := [4]f32{1.0, 1.0, 1.0, 1.0}
 	rl.SetShaderValue(msdfShader, fgColorLoc, &fgColor, .VEC4)
@@ -35,7 +42,7 @@ draw :: proc() {
 
 	// draw
 	rl.BeginShaderMode(msdfShader)
-	rl.DrawTexture(fontTexture, 0, 0, rl.WHITE)
+	arfont_renderer.drawGlyph(font, fontTexture, 'A', {}, rl.WHITE)
 	rl.EndShaderMode()
 
 	rl.EndDrawing()
