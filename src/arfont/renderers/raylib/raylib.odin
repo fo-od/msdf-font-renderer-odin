@@ -29,9 +29,9 @@ drawGlyph :: proc(
 			texture,
 			{
 				glyph.atlasBounds.left,
-				glyph.atlasBounds.bottom,
+				glyph.atlasBounds.top,
 				glyph.atlasBounds.right - glyph.atlasBounds.left,
-				glyph.atlasBounds.top - glyph.atlasBounds.bottom,
+				glyph.atlasBounds.bottom - glyph.atlasBounds.top,
 			},
 			pos,
 			color,
