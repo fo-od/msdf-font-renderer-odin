@@ -1,4 +1,4 @@
-package arfont
+package msdf_font_renderer
 
 import "core:encoding/json"
 import "core:fmt"
@@ -9,11 +9,6 @@ parse_json_file :: proc(file: ^os.File) -> (font: Font) {
 	err := json.unmarshal(data, &font)
 	if err != nil do fmt.printfln("JSON error: %v", err)
 	free_all(context.temp_allocator)
-	return
-}
-
-// TODO: implement this
-parse_arfont_file :: proc(file: ^os.File) -> (font: Font, atlasImage: []byte) {
 	return
 }
 

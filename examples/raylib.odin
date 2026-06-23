@@ -1,11 +1,11 @@
 package main
 
-import "../arfont"
-import arfont_renderer "../arfont/renderers/raylib"
+import msdfont "../"
+import msdfont_renderer "../renderers/raylib"
 import "core:os"
 import rl "vendor:raylib"
 
-font: arfont.Font
+font: msdfont.Font
 fontTexture: rl.Texture2D
 fontScale: f32 = 1
 
@@ -20,23 +20,28 @@ main :: proc() {
 
 init :: proc() {
 	rl.SetConfigFlags({.WINDOW_RESIZABLE, .VSYNC_HINT})
-	rl.InitWindow(640, 480, "arfont-renderer-raylib")
+	rl.InitWindow(640, 480, "msdfont-renderer-raylib")
 
-	arfont_renderer.init_shader()
+	msdfont_renderer.init_shader()
 
 	fontTexture = rl.LoadTexture("src/resources/inter.png")
 	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scaling
 
 	fontData, _ := os.open("src/resources/inter.json")
-	font = arfont.parse_json_file(fontData)
+	font = msdfont.parse_json_file(fontData)
+}
+
+input :: proc() {
+	fontScale += rl.GetMouseWheelMove() * rl.GetFrameTime()
+	if fontScale < 0.1 do fontScale = 0.1
 }
 
 draw :: proc() {
 	rl.BeginDrawing()
 	rl.ClearBackground(rl.BLACK)
 
-	rl.BeginShaderMode(arfont_renderer.shader)
-	arfont_renderer.draw_text(
+	rl.BeginShaderMode(msdfont_renderer.shader)
+	msdfont_renderer.draw_text(
 		font,
 		fontTexture,
 		"Use mouse wheel to zoom in/out!",
@@ -44,7 +49,7 @@ draw :: proc() {
 		rl.WHITE,
 		1,
 	)
-	arfont_renderer.draw_text(
+	msdfont_renderer.draw_text(
 		font,
 		fontTexture,
 		"Hellope!",
@@ -55,10 +60,5 @@ draw :: proc() {
 	rl.EndShaderMode()
 
 	rl.EndDrawing()
-}
-
-input :: proc() {
-	fontScale += rl.GetMouseWheelMove() * rl.GetFrameTime()
-	if fontScale < 0.1 do fontScale = 0.1
 }
 

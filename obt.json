@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/fo-od/obt/refs/heads/main/schema/obt.schema.json",
-  "name": "arfont-renderer-odin",
+  "name": "msdf-font-renderer-odin",
   "build": {
     "useOlsCollections": true
   }

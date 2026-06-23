@@ -1,6 +1,6 @@
-package arfont_renderer_raylib
+package msdf_font_renderer_raylib
 
-import "../../../arfont"
+import msdfont "../../"
 import rl "vendor:raylib"
 
 // must run init_shader() to use this
@@ -43,9 +43,9 @@ init_shader :: proc() {
 
 @(private)
 draw_glyph :: proc(
-	font: arfont.Font,
+	font: msdfont.Font,
 	texture: rl.Texture2D,
-	glyph: arfont.Glyph,
+	glyph: msdfont.Glyph,
 	pos: rl.Vector2,
 	color: rl.Color,
 	scale: f32 = 1.0,
@@ -80,20 +80,24 @@ draw_glyph :: proc(
 }
 
 draw_text :: proc(
-	font: arfont.Font,
+	font: msdfont.Font,
 	texture: rl.Texture2D,
 	text: string,
 	pos: rl.Vector2,
 	color: rl.Color,
 	scale: f32 = 1.0,
 ) {
+	if len(text) == 0 do return
+
+	min_x, _, _, max_top := msdfont.get_text_bounds(font, text, scale)
+
 	adv: f32
-	cursor := pos
+	cursor := rl.Vector2{pos.x - min_x, pos.y + max_top}
 	for c in text {
 		cursor.x += adv
 
 		char := transmute(i32)c
-		glyph := arfont.getGlyph(font, char)
+		glyph := msdfont.getGlyph(font, char)
 
 		adv = glyph.advance * font.atlas.size * scale
 

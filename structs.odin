@@ -1,4 +1,4 @@
-package arfont
+package msdf_font_renderer
 
 Font :: struct {
 	atlas:   Atlas `json:"atlas"`,
