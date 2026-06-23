@@ -41,3 +41,13 @@ draw :: proc() {
 	rl.EndDrawing()
 }
 
+input :: proc() {
+	if rl.IsKeyDown(.UP) {
+		fontScale += 0.5 * rl.GetFrameTime()
+	}
+	if rl.IsKeyDown(.DOWN) {
+		fontScale -= 0.5 * rl.GetFrameTime()
+	}
+	if fontScale < 0.1 do fontScale = 0.1
+}
+
