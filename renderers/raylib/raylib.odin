@@ -3,6 +3,11 @@ package msdf_font_renderer_raylib
 import msdfont "../../"
 import rl "vendor:raylib"
 
+Font :: struct {
+	font:    msdfont.Font,
+	texture: rl.Texture2D,
+}
+
 // must run init_shader() to use this
 shader: rl.Shader
 
@@ -43,8 +48,7 @@ init_shader :: proc() {
 
 @(private)
 draw_glyph :: proc(
-	font: msdfont.Font,
-	texture: rl.Texture2D,
+	font: Font,
 	glyph: msdfont.Glyph,
 	pos: rl.Vector2,
 	color: rl.Color,
@@ -52,10 +56,10 @@ draw_glyph :: proc(
 ) {
 	// Source rectangle in the texture atlas
 	source_rec: rl.Rectangle
-	if font.atlas.yOrigin == "bottom" {
+	if font.font.atlas.yOrigin == "bottom" {
 		source_rec = {
 			glyph.atlasBounds.left,
-			f32(font.atlas.height) - glyph.atlasBounds.top,
+			f32(font.font.atlas.height) - glyph.atlasBounds.top,
 			glyph.atlasBounds.right - glyph.atlasBounds.left,
 			glyph.atlasBounds.top - glyph.atlasBounds.bottom,
 		}
@@ -70,26 +74,19 @@ draw_glyph :: proc(
 
 	// Destination rectangle on the screen
 	dest_rec := rl.Rectangle {
-		pos.x + (glyph.planeBounds.left * font.atlas.size * scale),
-		pos.y - (glyph.planeBounds.top * font.atlas.size * scale),
+		pos.x + (glyph.planeBounds.left * font.font.atlas.size * scale),
+		pos.y - (glyph.planeBounds.top * font.font.atlas.size * scale),
 		source_rec.width * scale,
 		source_rec.height * scale,
 	}
 
-	rl.DrawTexturePro(texture, source_rec, dest_rec, {}, 0, color)
+	rl.DrawTexturePro(font.texture, source_rec, dest_rec, {}, 0, color)
 }
 
-draw_text :: proc(
-	font: msdfont.Font,
-	texture: rl.Texture2D,
-	text: string,
-	pos: rl.Vector2,
-	color: rl.Color,
-	scale: f32 = 1.0,
-) {
+draw_text :: proc(font: Font, text: string, pos: rl.Vector2, color: rl.Color, scale: f32 = 1.0) {
 	if len(text) == 0 do return
 
-	min_x, _, _, max_top := msdfont.get_text_bounds(font, text, scale)
+	min_x, _, _, max_top := msdfont.get_text_bounds(font.font, text, scale)
 
 	adv: f32
 	cursor := rl.Vector2{pos.x - min_x, pos.y + max_top}
@@ -97,11 +94,11 @@ draw_text :: proc(
 		cursor.x += adv
 
 		char := transmute(i32)c
-		glyph := msdfont.getGlyph(font, char)
+		glyph := msdfont.getGlyph(font.font, char)
 
-		adv = glyph.advance * font.atlas.size * scale
+		adv = glyph.advance * font.font.atlas.size * scale
 
-		draw_glyph(font, texture, glyph, cursor, color, scale)
+		draw_glyph(font, glyph, cursor, color, scale)
 	}
 }
 

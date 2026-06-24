@@ -5,7 +5,7 @@ import msdfont_renderer "../renderers/raylib"
 import "core:os"
 import rl "vendor:raylib"
 
-font: msdfont.Font
+font: msdfont_renderer.Font
 fontTexture: rl.Texture2D
 fontScale: f32 = 1
 
@@ -24,11 +24,11 @@ init :: proc() {
 
 	msdfont_renderer.init_shader()
 
-	fontTexture = rl.LoadTexture("src/resources/inter.png")
+	font.texture = rl.LoadTexture("src/resources/inter.png")
 	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scaling
 
 	fontData, _ := os.open("src/resources/inter.json")
-	font = msdfont.parse_json_file(fontData)
+	font.font = msdfont.parse_json_file(fontData)
 }
 
 input :: proc() {
@@ -41,17 +41,9 @@ draw :: proc() {
 	rl.ClearBackground(rl.BLACK)
 
 	rl.BeginShaderMode(msdfont_renderer.shader)
+	msdfont_renderer.draw_text(font, "Use mouse wheel to zoom in/out!", {}, rl.WHITE, 1)
 	msdfont_renderer.draw_text(
 		font,
-		fontTexture,
-		"Use mouse wheel to zoom in/out!",
-		{},
-		rl.WHITE,
-		1,
-	)
-	msdfont_renderer.draw_text(
-		font,
-		fontTexture,
 		"Hellope!",
 		{cast(f32)rl.GetScreenWidth() / 2.0, cast(f32)rl.GetScreenHeight() / 2.0},
 		rl.WHITE,
