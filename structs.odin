@@ -14,8 +14,8 @@ Atlas :: struct {
 	distanceRange:       f32 `json:"distanceRange"`,
 	distanceRangeMiddle: f32 `json:"distanceRangeMiddle"`,
 	size:                f32 `json:"size"`,
-	width:               int `json:"width"`,
-	height:              int `json:"height"`,
+	width:               u32 `json:"width"`,
+	height:              u32 `json:"height"`,
 	// either bottom or top
 	yOrigin:             string `json:"yOrigin"`,
 }
@@ -34,21 +34,23 @@ Glyph :: struct {
 	// in ems
 	advance:     f32 `json:"advance"`,
 	// in ems
-	planeBounds: struct {
-		left:   f32 `json:"left"`,
-		bottom: f32 `json:"bottom"`,
-		right:  f32 `json:"right"`,
-		top:    f32 `json:"top"`,
-	},
+	planeBounds: Bounds,
 	// in pixels
-	atlasBounds: struct {
-		left:   f32 `json:"left"`,
-		bottom: f32 `json:"bottom"`,
-		right:  f32 `json:"right"`,
-		top:    f32 `json:"top"`,
+	atlasBounds: Bounds,
+}
+
+// TODO: add json tag (need to patch msdf-atlas-gen to populate kerning info)
+KernPair :: struct {
+	codepoint1, codepoint2: u32,
+	advance:                struct {
+		h, v: f32,
 	},
 }
 
-// TODO: implement :p
-KernPair :: struct {}
+Bounds :: struct {
+	left:   f32 `json:"left"`,
+	bottom: f32 `json:"bottom"`,
+	right:  f32 `json:"right"`,
+	top:    f32 `json:"top"`,
+}
 
