@@ -41,6 +41,8 @@ parse_arfont :: proc(file: ^os.File) -> (font: Font, texture: []byte) {
 		assign_at(&newGlyphs, i, newGlyph)
 	}
 
+	font.glyphs = newGlyphs[:]
+
 	font.kerning = transmute([]KernPair)arf.variants[0].kernPairs
 
 	font.name = arf.variants[0].name
