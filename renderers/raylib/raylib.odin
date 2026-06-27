@@ -1,6 +1,7 @@
 package msdf_font_renderer_raylib
 
 import msdfont "../../"
+import "core:os"
 import rl "vendor:raylib"
 
 Font :: struct {
@@ -44,6 +45,15 @@ init_shader :: proc() {
             finalColor = vec4(fg.rgb, fg.a * opacity);
         }`,
 	)
+}
+
+parse_arfont :: proc(file: ^os.File) -> Font {
+	fon, tex := msdfont.parse_arfont(file)
+	img := rl.LoadImageFromMemory(".png", raw_data(tex), i32(len(tex)))
+	tex2d := rl.LoadTextureFromImage(img)
+	rl.UnloadImage(img)
+
+	return {fon, tex2d}
 }
 
 @(private)
