@@ -6,7 +6,6 @@ import "core:os"
 import rl "vendor:raylib"
 
 font: msdfont_renderer.Font
-fontTexture: rl.Texture2D
 fontScale: f32 = 1
 
 main :: proc() {
@@ -24,10 +23,10 @@ init :: proc() {
 
 	msdfont_renderer.init_shader()
 
-	font.texture = rl.LoadTexture("src/resources/inter.png")
-	rl.SetTextureFilter(fontTexture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scaling
+	font.texture = rl.LoadTexture("resources/inter.png")
+	rl.SetTextureFilter(font.texture, .BILINEAR) // for some reason its not bilinear by default, which is needed for MSDF scaling
 
-	fontData, _ := os.open("src/resources/inter.json")
+	fontData, _ := os.open("resources/inter.json")
 	font.font = msdfont.parse_json_file(fontData)
 }
 

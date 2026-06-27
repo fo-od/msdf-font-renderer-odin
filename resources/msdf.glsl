@@ -7,10 +7,9 @@ out vec4 finalColor;
 
 uniform sampler2D tex;
 uniform float pxRange = 2.0;
-uniform vec4 fgColor = vec4(1.0, 1.0, 1.0, 1.0); // fallback color
 
-float median(float r, float g, float b) {
-    return max(min(r, g), min(max(r, g), b));
+float median(vec3 rgb) {
+    return max(min(rgb.r, rgb.g), min(max(rgb.r, rgb.g), rgb.b));
 }
 
 float screenPxRange() {
@@ -20,11 +19,9 @@ float screenPxRange() {
 }
 
 void main() {
-    vec3 msd = texture(tex, fragTexCoord).rgb;
-    float sd = median(msd.r, msd.g, msd.b);
+    float sd = median(texture(tex, fragTexCoord).rgb);
     float screenPxDistance = screenPxRange() * (sd - 0.5);
     float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
 
-    vec4 fg = fgColor * fragColor; // tint (provided by raylib)
-    finalColor = vec4(fg.rgb, fg.a * opacity);
+    finalColor = vec4(fragColor.rgb, fragColor.a * opacity);
 }
