@@ -102,7 +102,7 @@ draw_text :: proc(font: Font, text: string, pos: rl.Vector2, color: rl.Color, sc
 		cursor.x += adv
 
 		char := transmute(i32)c
-		glyph := msdfont.getGlyph(font.font, char)
+		glyph := msdfont.get_glyph(font.font, char)
 
 		adv = glyph.advance * font.font.atlas.size * scale
 

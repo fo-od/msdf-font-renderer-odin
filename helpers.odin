@@ -2,7 +2,7 @@ package msdf_font_renderer
 
 import "core:fmt"
 
-getGlyph :: proc(font: Font, char: i32) -> Glyph {
+get_glyph :: proc(font: Font, char: i32) -> Glyph {
 	for g in font.glyphs {
 		if g.unicode == char do return g
 	}
@@ -26,7 +26,7 @@ get_text_bounds :: proc(
 	for c in text {
 		current_x += adv
 		char := transmute(i32)c
-		glyph := getGlyph(font, char)
+		glyph := get_glyph(font, char)
 		adv = glyph.advance * font.atlas.size * scale
 
 		if glyph.unicode == -1 do continue
