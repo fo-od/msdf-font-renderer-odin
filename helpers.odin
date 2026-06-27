@@ -10,7 +10,13 @@ getGlyph :: proc(font: Font, char: i32) -> Glyph {
 	return {unicode = -1}
 }
 
-get_text_bounds :: proc(font: Font, text: string, scale: f32 = 1.0) -> (min_x, max_x, min_y, max_y: f32) {
+get_text_bounds :: proc(
+	font: Font,
+	text: string,
+	scale: f32 = 1.0,
+) -> (
+	min_x, max_x, min_y, max_y: f32,
+) {
 	if len(text) == 0 do return
 
 	current_x: f32 = 0
@@ -42,6 +48,7 @@ get_text_bounds :: proc(font: Font, text: string, scale: f32 = 1.0) -> (min_x, m
 			if glyph_bottom < min_y do min_y = glyph_bottom
 			if glyph_top > max_y do max_y = glyph_top
 		}
+		max_x = current_x + adv
 	}
 	return
 }
